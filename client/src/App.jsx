@@ -4,7 +4,7 @@ import { Box, Button, Container, Stack, TextField, Typography } from "@mui/mater
 const App = () => {
   const socket = useMemo(
     () =>
-      io("http://localhost:3001", {
+      io("http://localhost:5000", {
         withCredentials: true,
       }),
     []
@@ -19,6 +19,9 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     socket.emit("message", { message, room });
+    socket.on("messagea", (e) => {
+      console.log(e);
+    });
     setMessage("");
   };
 
@@ -30,6 +33,7 @@ const App = () => {
 
   useEffect(() => {
     socket.on("connect", () => {
+      console.log(socket);
       setSocketId(socket.id);
       console.log("connected", socket.id);
     });
