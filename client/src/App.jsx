@@ -1,17 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
-import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Stack, TextField, Typography } from "@mui/material";
 const App = () => {
   const socket = useMemo(
     () =>
-      io("http://localhost:3000", {
+      io("http://localhost:3001", {
         withCredentials: true,
       }),
     []
@@ -61,6 +54,13 @@ const App = () => {
       <Typography variant="h6" component="div" gutterBottom>
         {socketID}
       </Typography>
+      <Stack>
+        {messages.map((m, i) => (
+          <Typography key={i} variant="h6" component="div" gutterBottom>
+            {m}
+          </Typography>
+        ))}
+      </Stack>
 
       <form onSubmit={joinRoomHandler}>
         <h5>Join Room</h5>
@@ -95,14 +95,6 @@ const App = () => {
           Send
         </Button>
       </form>
-
-      <Stack>
-        {messages.map((m, i) => (
-          <Typography key={i} variant="h6" component="div" gutterBottom>
-            {m}
-          </Typography>
-        ))}
-      </Stack>
     </Container>
   );
 };
