@@ -4,7 +4,7 @@ import { Box, Button, Container, Stack, TextField, Typography } from "@mui/mater
 const App = () => {
   const socket = useMemo(
     () =>
-      io("http://localhost:5000", {
+      io("http://localhost:3001", {
         withCredentials: true,
       }),
     []
