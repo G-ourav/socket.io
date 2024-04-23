@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log("User Connected", socket.id);
-  // chat with single 
+  // chat with single
 
   socket.on("message", ({ room, message }) => {
     console.log({ room, message });
