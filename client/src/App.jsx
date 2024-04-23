@@ -2,13 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 import { Box, Button, Container, Stack, TextField, Typography } from "@mui/material";
 const App = () => {
-  const socket = useMemo(
-    () =>
-      io("http://localhost:3001", {
-        withCredentials: true,
-      }),
-    []
-  );
+  // const socket = useMemo(
+  //   () =>
+  //     io("http://localhost:3001", {
+  //       withCredentials: true,
+  //     }),
+  //   []
+  // );
 
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -16,40 +16,55 @@ const App = () => {
   const [socketID, setSocketId] = useState("");
   const [roomName, setRoomName] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    socket.emit("message", { message, room });
-    socket.on("messagea", (e) => {
-      console.log(e);
-    });
-    setMessage("");
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   socket.emit("message", { message, room });
+  //   socket.on("messagea", (e) => {
+  //     console.log(e);
+  //   });
+  //   setMessage("");
+  // };
 
-  const joinRoomHandler = (e) => {
-    e.preventDefault();
-    socket.emit("join-room", roomName);
-    setRoomName("");
-  };
+  // const joinRoomHandler = (e) => {
+  //   e.preventDefault();
+  //   socket.emit("join-room", roomName);
+  //   setRoomName("");
+  // };
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log(socket);
-      setSocketId(socket.id);
-      console.log("connected", socket.id);
-    });
-
-    socket.on("receive-message", (data) => {
-      console.log(data);
-      setMessages((messages) => [...messages, data]);
-    });
-
-    socket.on("welcome", (s) => {
-      console.log(s);
-    });
-
-    return () => {
-      socket.disconnect();
+    const socket = new WebSocket("ws://localhost:3001");
+    console.log(socket);
+    socket.onopen = () => {
+      socket.send("Hello!");
     };
+
+    socket.onmessage = (data) => {
+      console.log(data);
+    };
+    // socket.on("connect", () => {
+    //   console.log(socket);
+    //   setSocketId(socket.id);
+    //   console.log("connected", socket.id);
+    // });
+    // if (socket.current) {
+    //   console.log("connected3", socket.current);
+    //   // socket.current.on("msg-recieve", (msg) => {
+    //   //   setArrivalMessage({ fromSelf: false, message: msg });
+    //   // });
+    // }
+
+    // socket.on("receive-message", (data) => {
+    //   console.log(data);
+    //   setMessages((messages) => [...messages, data]);
+    // });
+
+    // socket.on("welcome", (s) => {
+    //   console.log(s);
+    // });
+
+    // return () => {
+    //   socket.disconnect();
+    // };
   }, []);
 
   return (
@@ -65,7 +80,7 @@ const App = () => {
           </Typography>
         ))}
       </Stack>
-
+      {/* 
       <form onSubmit={joinRoomHandler}>
         <h5>Join Room</h5>
         <TextField
@@ -78,9 +93,9 @@ const App = () => {
         <Button type="submit" variant="contained" color="primary">
           Join
         </Button>
-      </form>
+      </form> */}
 
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}>
         <TextField
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -98,7 +113,7 @@ const App = () => {
         <Button type="submit" variant="contained" color="primary">
           Send
         </Button>
-      </form>
+      </form> */}
     </Container>
   );
 };
