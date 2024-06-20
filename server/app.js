@@ -48,10 +48,15 @@ app.get("/", (req, res) => {
 //     next();
 //   });
 // });
+let online_users = [];
 
 io.on("connection", (socket) => {
   console.log("User Connected", socket.id);
   // chat with single
+  socket.on("online", ({ token }) => {
+    online_users.push({ socket_id: socket.id, token: token });
+    console.log(online_users, token);
+  });
 
   socket.on("message", ({ room, message }) => {
     console.log({ room, message });
@@ -59,9 +64,10 @@ io.on("connection", (socket) => {
     socket.emit("messagea", { id: socket.id });
   });
 
-  socket.on("join-room", (room) => {
+  socket.on("join-room", ({ room, token }) => {
     socket.join(room);
-    console.log(`User joined room ${room}`);
+    online_users.push({ socket_id: socket.id, token: token });
+    console.log(` User joined room ${room}`, online_users, token);
   });
 
   socket.on("disconnect", () => {
